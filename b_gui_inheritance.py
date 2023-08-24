@@ -2,7 +2,7 @@ import requests
 import re
 
 import sys
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 
 
 from a_gui_from_ui import *
@@ -11,7 +11,7 @@ import openpyxl
 
 
 # запускаем гуй после конвертации ui в py
-class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
@@ -23,6 +23,23 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def parse(self):
         inn = self.lineEdit_INN_QT_INPUT.text()
 
+        # проверка правильности ввода ИНН
+        while True:
+            if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
+                break
+            else:
+                print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
+                # self.text_browser_info.append('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
+                error_box = QMessageBox()  # Создаем окно уведомления
+                error_box.setIcon(QMessageBox.Critical)  # Устанавливаем иконку ошибки
+                error_box.setWindowTitle("Ошибка")  # Устанавливаем заголовок окна
+                error_box.setText("Ошибка в ИНН/ОГРН. Попробуйте еще раз")  # Устанавливаем текст ошибки
+                error_box.exec_()
+
+                #error_box.exec_()  # Показываем окно уведомления и блокируем основное окно приложения
+                #break
+
+        # сам парсинг
         url = 'https://egrul.nalog.ru'
         url_1 = 'https://egrul.nalog.ru/search-result/'
 
