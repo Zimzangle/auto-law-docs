@@ -16,7 +16,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
 
-        # добавляем свой функционал в GUI
+        # добавляем функционал кнопок - ссылка на функции парсинг и сохр в эксель
+        self.pushButton_Parse.clicked.connect(self.parse)
         self.pushButton_Record_to_Excel.clicked.connect(self.save_to_excel)
 
     def parse(self):
