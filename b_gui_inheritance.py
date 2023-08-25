@@ -70,13 +70,13 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             self.innOOO = str(r2['rows'][0]['i'])
             self.ogrnOOO = str(r2['rows'][0]['o'])
             self.kppOOO = str(r2['rows'][0]['p'])
-
+        # для ИП
         elif len(inn) == 12 or len(inn) == 15:
-            nameOOO_IP = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
-            self.lineEdit_NAME_organization.setText(nameOOO_IP)
+            nameOOO = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
+            self.lineEdit_NAME_organization.setText(nameOOO)
 
-            self.ogrnOOO_IP = str(r2['rows'][0]['o'])
-            self.innOOO_IP = str(r2['rows'][0]['i'])
+            self.ogrnOOO = str(r2['rows'][0]['o'])
+            self.innOOO = str(r2['rows'][0]['i'])
         else:
             print("Ошибка в ИНН/ОГРН")
 
@@ -98,12 +98,26 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         last_record = (int(ws.max_row) + 1)  # найти номер незаполненной строки
 
         # print(str('A') + str(last_record)) # номер ячейки
+        # ячейка А
+        dogovor_excel_formula = str('=CONCATENATE(' + str("S" + str(last_record))) + str('," Договор № ",E') + str(
+            last_record) + str('," от ",TEXT(F') + str(last_record) + str(',"ДД.ММ.ГГ "),D') + str(last_record) + str(
+            ')')
+        ws[str('A') + str(last_record)] = dogovor_excel_formula
 
+        # переделать В и С
+        ws[str('B') + str(last_record)] = "-"
+        ws[str('C') + str(last_record)] = '-'
 
+        # ячейки парсера забираем из введенного текста в форму
+        ws[str('D') + str(last_record)] = self.lineEdit_NAME_organization.text()
+        ws[str('J') + str(last_record)] = self.lineEdit_form.text()
+        ws[str('L') + str(last_record)] = self.lineEdit_seo_director_position.text()
+        ws[str('N') + str(last_record)] = self.lineEdit_seo_name.text()
+        # ws[str('V') + str(last_record)] = self.kppOOO # не может найти у ип и крашится
+        ws[str('W') + str(last_record)] = self.textEdit_adress.toPlainText()
+        ws[str('U') + str(last_record)] = self.ogrnOOO
+        ws[str('T') + str(last_record)] = self.innOOO
 
-
-        text_to_save = self.lineEdit_NAME_organization.text()
-        ws[str('B') + str(last_record)] = str("text_to_save")
 
 
         # Сохраняем файл
