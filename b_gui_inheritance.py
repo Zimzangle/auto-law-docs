@@ -1,13 +1,12 @@
 import requests
 import re
 import os
-
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox
 
 
 from a_gui_from_ui import *
-import sys
+
 from datetime import datetime
 from openpyxl import load_workbook
 
@@ -48,6 +47,10 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.add_to_gui_parse_results(inn, r2)
 
     def add_to_gui_parse_results (self, inn, r2):
+        # текущая дата договора по умолчанию
+        self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
+
+        # вот тут парсер
         if len(inn) == 10 or len(inn) == 13:
             nameOOO = str(r2['rows'][0]['c'])  # название контрагента ООО "КТото"
             nameOOO_here = re.search(r'(?<=").*?(?=")', nameOOO)  # найти текст между кавычек # print(nameOOO_first[0]) нужен индекс
@@ -74,9 +77,10 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         elif len(inn) == 12 or len(inn) == 15:
             nameOOO = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
             self.lineEdit_NAME_organization.setText(nameOOO)
-
+            self.kppOOO = str('')
             self.ogrnOOO = str(r2['rows'][0]['o'])
             self.innOOO = str(r2['rows'][0]['i'])
+            self.lineEdit_form.setText('ИП')
         else:
             print("Ошибка в ИНН/ОГРН")
 
@@ -91,11 +95,13 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
 
     def save_to_excel(self):
         selected_xlsm = self.comboBox_xslm_choice.currentText()
-        choice_my_organization = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
+        self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
 
         wb = load_workbook(selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
         ws = wb['BD']  # имя листа
         last_record = (int(ws.max_row) + 1)  # найти номер незаполненной строки
+
+        self.lineEdit_number_dogovor.setText(self.choice_my_organization)
 
         # print(str('A') + str(last_record)) # номер ячейки
         # ячейка А
@@ -104,21 +110,22 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             ')')
         ws[str('A') + str(last_record)] = dogovor_excel_formula
 
-        # переделать В и С
-        ws[str('B') + str(last_record)] = "-"
-        ws[str('C') + str(last_record)] = '-'
-
         # ячейки парсера забираем из введенного текста в форму
         ws[str('D') + str(last_record)] = self.lineEdit_NAME_organization.text()
         ws[str('J') + str(last_record)] = self.lineEdit_form.text()
         ws[str('L') + str(last_record)] = self.lineEdit_seo_director_position.text()
         ws[str('N') + str(last_record)] = self.lineEdit_seo_name.text()
-        # ws[str('V') + str(last_record)] = self.kppOOO # не может найти у ип и крашится
+        ws[str('V') + str(last_record)] = self.kppOOO
         ws[str('W') + str(last_record)] = self.textEdit_adress.toPlainText()
         ws[str('U') + str(last_record)] = self.ogrnOOO
         ws[str('T') + str(last_record)] = self.innOOO
 
-
+        # переделать В и С
+        ws[str('B') + str(last_record)] = "-"
+        ws[str('C') + str(last_record)] = '-'
+        # ws[str('E') + str(last_record)] = str(last_record) + str(organization_number)
+        # ws[str('F') + str(last_record)] = datetime.today().strftime('%d.%m.%Y')
+        # ws[str('G') + str(last_record)] = 'поставки товаров и оказания услуг'
 
         # Сохраняем файл
         wb.save(selected_xlsm)
