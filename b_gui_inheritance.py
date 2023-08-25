@@ -44,15 +44,23 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
 
     def add_to_gui_parse_results (self, inn, r2):
         if len(inn) == 10 or len(inn) == 13:
-            adressOOO = str(r2['rows'][0]['a'])
             nameOOO = str(r2['rows'][0]['c'])  # название контрагента ООО "КТото"
-            nameOOO_first = re.search(r'(?<=").*?(?=")', nameOOO)  # найти текст между кавычек # print(nameOOO_first[0]) нужен индекс
-            nameOOO_second = re.split(r'"', nameOOO)  # разделить строку на словарь по символу " # print(nameOOO_last[0])
+            nameOOO_here = re.search(r'(?<=").*?(?=")', nameOOO)  # найти текст между кавычек # print(nameOOO_first[0]) нужен индекс
+            self.lineEdit_NAME_organization.setText(nameOOO_here[0])
+
+            nameOOO_form = re.split(r'"', nameOOO)  # разделить строку на словарь по символу " # print(nameOOO_last[0])
+            self.lineEdit_form.setText(nameOOO_form[0])
+
+            adressOOO = str(r2['rows'][0]['a'])
+            self.textEdit_adress.setText(adressOOO)
 
             seoOOO = str(r2['rows'][0]['g'])
             seoOOO_name = re.split(r': ', seoOOO)  # print(seoOOO_name [0]) и print(seoOOO_seo [1])
-            seoOOO_name_DIRECTOR1 = str(seoOOO_name[0])
-            seoOOO_name_Direcor2 = seoOOO_name_DIRECTOR1.capitalize()
+            self.lineEdit_seo_name.setText(seoOOO_name[1])
+
+            seoOOO_director_position = str(seoOOO_name[0]).capitalize()
+            self.lineEdit_seo_director_position.setText(seoOOO_director_position)
+
 
             innOOO = str(r2['rows'][0]['i'])
             ogrnOOO = str(r2['rows'][0]['o'])
@@ -60,13 +68,15 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
 
         elif len(inn) == 12 or len(inn) == 15:
             nameOOO_IP = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
+            self.lineEdit_NAME_organization.setText(nameOOO_IP)
+
             ogrnOOO_IP = str(r2['rows'][0]['o'])
             innOOO_IP = str(r2['rows'][0]['i'])
         else:
             print("Ошибка в ИНН/ОГРН")
 
     def save_to_excel(self):
-        text_to_save = self.lineEdit_INN_QT_INPUT.text()
+        text_to_save = self.lineEdit_NAME_organization.text()
 
         # Открываем существующий файл или создаем новый
         wb = openpyxl.Workbook()
