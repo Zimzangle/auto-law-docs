@@ -1,17 +1,19 @@
 import requests
 import re
+import os
 
 import sys
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox
 
 
 from a_gui_from_ui import *
 import sys
-import openpyxl
+from datetime import datetime
+from openpyxl import load_workbook
 
 
 # запускаем гуй после конвертации ui в py
-class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
+class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
@@ -19,6 +21,10 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
         # добавляем функционал кнопок - ссылка на функции парсинг и сохр в эксель
         self.pushButton_Parse.clicked.connect(self.inn_check)
         self.pushButton_Record_to_Excel.clicked.connect(self.save_to_excel)
+
+        # для выбора xlsm файла
+        self.add_files_to_combo()
+        self.comboBox_xslm_choice.currentIndexChanged.connect(self.on_combobox_changed)
 
     def inn_check(self):
         inn = self.lineEdit_INN_QT_INPUT.text()
@@ -75,18 +81,31 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
         else:
             print("Ошибка в ИНН/ОГРН")
 
-    def save_to_excel(self):
+        #выбор xlsm файла
+    def add_files_to_combo(self):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+
+        for filename in os.listdir(current_directory):
+            if filename.endswith(".xlsm"):
+                self.comboBox_xslm_choice.addItem(filename)
+
+    def on_combobox_changed(self):
+        selected_xlsm = self.comboBox_xslm_choice.currentText()
+        name_organization_from_xlsm = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
+
+        wb = load_workbook(selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
+        ws = wb['BD']  # имя листа
+        last_record = (int(ws.max_row) + 1)  # найти номер незаполненной строки
+        # print(str('A') + str(last_record)) # номер ячейки
+
+    def save_to_excel(self, ws, wb, last_record):
+        self.on_combobox_changed(self, ws, wb, last_record)
         text_to_save = self.lineEdit_NAME_organization.text()
+        ws[str('B') + str(last_record)] = text_to_save
 
-        # Открываем существующий файл или создаем новый
-        wb = openpyxl.Workbook()
-        sheet = wb.active
-
-        # Записываем текст в ячейку A1
-        sheet["A1"] = text_to_save
 
         # Сохраняем файл
-        wb.save("example.xlsx")
+        wb.save(selected_xlsm)
 
         print("Текст сохранен в ячейке A1")
 
