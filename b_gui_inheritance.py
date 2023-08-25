@@ -105,30 +105,53 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
 
         # print(str('A') + str(last_record)) # номер ячейки
         # ячейка А
-        dogovor_excel_formula = str('=CONCATENATE(' + str("S" + str(last_record))) + str('," Договор № ",E') + str(
-            last_record) + str('," от ",TEXT(F') + str(last_record) + str(',"ДД.ММ.ГГ "),D') + str(last_record) + str(
+        dogovor_excel_formula = str('=CONCATENATE(' + str("S" + str(self.last_record))) + str('," Договор № ",E') + str(
+            self.last_record) + str('," от ",TEXT(F') + str(self.last_record) + str(',"ДД.ММ.ГГ "),D') + str(self.last_record) + str(
             ')')
-        ws[str('A') + str(last_record)] = dogovor_excel_formula
+        self.ws[str('A') + str(self.last_record)] = dogovor_excel_formula
 
         # ячейки парсера забираем из введенного текста в форму
-        ws[str('D') + str(last_record)] = self.lineEdit_NAME_organization.text()
-        ws[str('J') + str(last_record)] = self.lineEdit_form.text()
-        ws[str('L') + str(last_record)] = self.lineEdit_seo_director_position.text()
-        ws[str('N') + str(last_record)] = self.lineEdit_seo_name.text()
-        ws[str('V') + str(last_record)] = self.kppOOO
-        ws[str('W') + str(last_record)] = self.textEdit_adress.toPlainText()
-        ws[str('U') + str(last_record)] = self.ogrnOOO
-        ws[str('T') + str(last_record)] = self.innOOO
+        self.ws[str('D') + str(self.last_record)] = self.lineEdit_NAME_organization.text()
+        self.ws[str('J') + str(self.last_record)] = self.lineEdit_form.text()
+        self.ws[str('L') + str(self.last_record)] = self.lineEdit_seo_director_position.text()
+        self.ws[str('N') + str(self.last_record)] = self.lineEdit_seo_name.text()
+        self.ws[str('V') + str(self.last_record)] = self.kppOOO
+        self.ws[str('W') + str(self.last_record)] = self.textEdit_adress.toPlainText()
+        self.ws[str('U') + str(self.last_record)] = self.ogrnOOO
+        self.ws[str('T') + str(self.last_record)] = self.innOOO
 
-        # переделать В и С
-        ws[str('B') + str(last_record)] = "-"
-        ws[str('C') + str(last_record)] = '-'
-        # ws[str('E') + str(last_record)] = str(last_record) + str(organization_number)
-        # ws[str('F') + str(last_record)] = datetime.today().strftime('%d.%m.%Y')
-        # ws[str('G') + str(last_record)] = 'поставки товаров и оказания услуг'
+        # остальные ячейки заполенные в qtDesigner
+        self.ws[str('B') + str(self.last_record)] = self.comboBox_original.currentText()
+        self.ws[str('E') + str(self.last_record)] = self.lineEdit_number_dogovor.text()
+        self.ws[str('F') + str(self.last_record)] = self.lineEdit_date.text()
+        self.ws[str('G') + str(self.last_record)] = self.lineEdit_name_dogovor.text()
+        self.ws[str('R') + str(self.last_record)] = self.lineEdit_ustav.text()
+
+        # ячейки формулы excel
+        cell_k = '=IF(JXXX="ООО ","Общество с ограниченной ответственностью",IF(JXXX="АО ","Акционерное общество",IF(JXXX="НАО ","Непубличное кционерное общество",IF(JXXX="ПАО ","Публичное акционерное общество",IF(JXXX="ИП","Индивидуальный предприниматель",JXXX)))))'
+        cell_k_change = re.sub(r'XXX', str(self.last_record), cell_k)
+        self.ws[str('K') + str(self.last_record)] = cell_k_change
+
+        cell_m = str('=IF(LYYY="Директор","директора",IF(LYYY="Генеральный директор","генерального директора",LYYY))')
+        cell_m_change = re.sub(r'YYY', str(self.last_record), cell_m)
+        self.ws[str('M') + str(self.last_record)] = str(cell_m_change)
+
+        cell_o = '=LEFT(NUUU,SEARCH(" *",NUUU)-1)&" "&MID(NUUU,SEARCH(" *",NUUU)+1,1)&"."&MID(NUUU,SEARCH(" *",NUUU,SEARCH(" *",NUUU)+1)+1,1)&"."'
+        cell_o_change = re.sub(r'UUU', str(self.last_record), cell_o)
+        self.ws[str('O') + str(self.last_record)] = str(cell_o_change)
+
+        cell_p = '=GenitiveCaseInCell1(NFFF)'
+        cell_p_change = re.sub(r'FFF', str(self.last_record), cell_p)
+        self.ws[str('P') + str(self.last_record)] = str(cell_p_change)
+
+        cell_q = '=IF(RIGHT(NZZZ,1)="ч","его","ей")'
+        cell_q_change = re.sub(r'ZZZ', str(self.last_record), cell_q)
+        self.ws[str('Q') + str(self.last_record)] = str(cell_q_change)
+        self.ws[str('R') + str(self.last_record)] = 'Устава'
+        self.ws[str('S') + str(self.last_record)] = str(f'{self.last_record:05}')
 
         # Сохраняем файл
-        wb.save(selected_xlsm)
+        self.wb.save(self.selected_xlsm)
 
         print("Текст сохранен в ячейке A1")
         print(self.innOOO)
