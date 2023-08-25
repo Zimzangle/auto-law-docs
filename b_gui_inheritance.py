@@ -24,6 +24,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         # для выбора xlsm файла
         self.add_files_to_combo()
 
+        self.excel_start()
+
     def inn_check(self):
         inn = self.lineEdit_INN_QT_INPUT.text()
 
@@ -47,8 +49,6 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.add_to_gui_parse_results(inn, r2)
 
     def add_to_gui_parse_results (self, inn, r2):
-        # текущая дата договора по умолчанию
-        self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
 
         # вот тут парсер
         if len(inn) == 10 or len(inn) == 13:
@@ -91,17 +91,17 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         for filename in os.listdir(current_directory):
             if filename.endswith(".xlsm"):
                 self.comboBox_xslm_choice.addItem(filename)
+    def excel_start(self):
+        self.selected_xlsm = self.comboBox_xslm_choice.currentText()
+        self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', self.selected_xlsm)[1]  # найти текст между пробелом и точкой а [1] убирает пробел
 
+        self.wb = load_workbook(self.selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
+        self.ws = self.wb['BD']  # имя листа
+        self.last_record = (int(self.ws.max_row) + 1)  # найти номер незаполненной строки
 
+        self.lineEdit_number_dogovor.setText(f'{self.last_record} {self.choice_my_organization}')
+        self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
     def save_to_excel(self):
-        selected_xlsm = self.comboBox_xslm_choice.currentText()
-        self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
-
-        wb = load_workbook(selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
-        ws = wb['BD']  # имя листа
-        last_record = (int(ws.max_row) + 1)  # найти номер незаполненной строки
-
-        self.lineEdit_number_dogovor.setText(self.choice_my_organization)
 
         # print(str('A') + str(last_record)) # номер ячейки
         # ячейка А
