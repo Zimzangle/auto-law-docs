@@ -24,7 +24,6 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
 
         # для выбора xlsm файла
         self.add_files_to_combo()
-        self.comboBox_xslm_choice.currentIndexChanged.connect(self.on_combobox_changed)
 
     def inn_check(self):
         inn = self.lineEdit_INN_QT_INPUT.text()
@@ -67,17 +66,17 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             seoOOO_director_position = str(seoOOO_name[0]).capitalize()
             self.lineEdit_seo_director_position.setText(seoOOO_director_position)
 
-
-            innOOO = str(r2['rows'][0]['i'])
-            ogrnOOO = str(r2['rows'][0]['o'])
-            kppOOO = str(r2['rows'][0]['p'])
+            # self добавляем чтобы можно было использовать из другого метода(другой функции) класса
+            self.innOOO = str(r2['rows'][0]['i'])
+            self.ogrnOOO = str(r2['rows'][0]['o'])
+            self.kppOOO = str(r2['rows'][0]['p'])
 
         elif len(inn) == 12 or len(inn) == 15:
             nameOOO_IP = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
             self.lineEdit_NAME_organization.setText(nameOOO_IP)
 
-            ogrnOOO_IP = str(r2['rows'][0]['o'])
-            innOOO_IP = str(r2['rows'][0]['i'])
+            self.ogrnOOO_IP = str(r2['rows'][0]['o'])
+            self.innOOO_IP = str(r2['rows'][0]['i'])
         else:
             print("Ошибка в ИНН/ОГРН")
 
@@ -89,25 +88,29 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             if filename.endswith(".xlsm"):
                 self.comboBox_xslm_choice.addItem(filename)
 
-    def on_combobox_changed(self):
+
+    def save_to_excel(self):
         selected_xlsm = self.comboBox_xslm_choice.currentText()
-        name_organization_from_xlsm = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
+        choice_my_organization = re.search(r' (?P<found_text>.*?)\.', selected_xlsm)[1] # найти текст между пробелом и точкой а [1] убирает пробел
 
         wb = load_workbook(selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
         ws = wb['BD']  # имя листа
         last_record = (int(ws.max_row) + 1)  # найти номер незаполненной строки
+
         # print(str('A') + str(last_record)) # номер ячейки
 
-    def save_to_excel(self, ws, wb, last_record):
-        self.on_combobox_changed(self, ws, wb, last_record)
+
+
+
         text_to_save = self.lineEdit_NAME_organization.text()
-        ws[str('B') + str(last_record)] = text_to_save
+        ws[str('B') + str(last_record)] = str("text_to_save")
 
 
         # Сохраняем файл
         wb.save(selected_xlsm)
 
         print("Текст сохранен в ячейке A1")
+        print(self.innOOO)
 
     def show_error_notification(self):
         error_box = QMessageBox()  # Создаем окно уведомления
