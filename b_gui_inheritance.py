@@ -17,28 +17,21 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
 
         # добавляем функционал кнопок - ссылка на функции парсинг и сохр в эксель
-        self.pushButton_Parse.clicked.connect(self.parse)
+        self.pushButton_Parse.clicked.connect(self.inn_check)
         self.pushButton_Record_to_Excel.clicked.connect(self.save_to_excel)
 
-    def parse(self):
+    def inn_check(self):
         inn = self.lineEdit_INN_QT_INPUT.text()
 
         # проверка правильности ввода ИНН
-        while True:
-            if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
-                break
-            else:
-                print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
-                # self.text_browser_info.append('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
-                error_box = QMessageBox()  # Создаем окно уведомления
-                error_box.setIcon(QMessageBox.Critical)  # Устанавливаем иконку ошибки
-                error_box.setWindowTitle("Ошибка")  # Устанавливаем заголовок окна
-                error_box.setText("Ошибка в ИНН/ОГРН. Попробуйте еще раз")  # Устанавливаем текст ошибки
-                error_box.exec_()
 
-                #error_box.exec_()  # Показываем окно уведомления и блокируем основное окно приложения
-                #break
+        if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
+            self.parse(inn)
+        else:
+            print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
+            self.show_error_notification()
 
+    def parse(self, inn):
         # сам парсинг
         url = 'https://egrul.nalog.ru'
         url_1 = 'https://egrul.nalog.ru/search-result/'
@@ -61,6 +54,14 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
         wb.save("example.xlsx")
 
         print("Текст сохранен в ячейке A1")
+
+    def show_error_notification(self):
+        error_box = QMessageBox()  # Создаем окно уведомления
+        error_box.setIcon(QMessageBox.Critical)  # Устанавливаем иконку ошибки
+        error_box.setWindowTitle("Ошибка")  # Устанавливаем заголовок окна
+        error_box.setText("Ошибка в номере ИНН/ОГРН. Исправьте")  # Устанавливаем текст ошибки
+        error_box.exec_()  # Показываем окно уведомления и блокируем основное окно приложения
+
 
 app = QApplication(sys.argv)
 window = Mywindow()
