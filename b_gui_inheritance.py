@@ -49,19 +49,19 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox):
             nameOOO_first = re.search(r'(?<=").*?(?=")', nameOOO)  # найти текст между кавычек # print(nameOOO_first[0]) нужен индекс
             nameOOO_second = re.split(r'"', nameOOO)  # разделить строку на словарь по символу " # print(nameOOO_last[0])
 
-            seoOOO = str(r1.json()['rows'][0]['g'])
+            seoOOO = str(r2['rows'][0]['g'])
             seoOOO_name = re.split(r': ', seoOOO)  # print(seoOOO_name [0]) и print(seoOOO_seo [1])
             seoOOO_name_DIRECTOR1 = str(seoOOO_name[0])
             seoOOO_name_Direcor2 = seoOOO_name_DIRECTOR1.capitalize()
 
-            innOOO = str(r1.json()['rows'][0]['i'])
-            ogrnOOO = str(r1.json()['rows'][0]['o'])
-            kppOOO = str(r1.json()['rows'][0]['p'])
+            innOOO = str(r2['rows'][0]['i'])
+            ogrnOOO = str(r2['rows'][0]['o'])
+            kppOOO = str(r2['rows'][0]['p'])
 
         elif len(inn) == 12 or len(inn) == 15:
-            nameOOO_IP = str.title(r1.json()['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
-            ogrnOOO_IP = str(r1.json()['rows'][0]['o'])
-            innOOO_IP = str(r1.json()['rows'][0]['i'])
+            nameOOO_IP = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
+            ogrnOOO_IP = str(r2['rows'][0]['o'])
+            innOOO_IP = str(r2['rows'][0]['i'])
         else:
             print("Ошибка в ИНН/ОГРН")
 
