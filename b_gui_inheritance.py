@@ -3,10 +3,8 @@ import re
 import os
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox
-
-
+from PyQt5.QtCore import QTimer
 from a_gui_from_ui import *
-
 from datetime import datetime
 from openpyxl import load_workbook
 
@@ -17,7 +15,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
 
-        # добавляем функционал кнопок - ссылка на функции парсинг и сохр в эксель
+        # добавляем функционал кнопок
+        # ссылка на функции парсинг и сохр в эксель
         self.pushButton_Parse.clicked.connect(self.inn_check)
         self.pushButton_Record_to_Excel.clicked.connect(self.save_to_excel)
 
@@ -25,17 +24,25 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.add_files_to_combo()
 
         self.excel_start()
+        self.comboBox_xslm_choice.currentIndexChanged.connect(self.excel_start)
+
 
     def inn_check(self):
-        inn = self.lineEdit_INN_QT_INPUT.text()
+        try:
+            inn = self.lineEdit_INN_QT_INPUT.text()
 
-        # проверка правильности ввода ИНН
+            # проверка правильности ввода ИНН
 
-        if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
-            self.parse(inn)
-        else:
-            print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
-            self.show_error_notification()
+            if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
+                self.parse(inn)
+            else:
+                print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
+                self.show_error_notification()
+        except:
+            self.lineEdit_result.setText('Ошибка. Возможно, в ИНН введены буквы')
+            self.timer = QTimer(self)
+            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
+            self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
 
     def parse(self, inn):
         # сам парсинг
@@ -50,6 +57,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
 
     def add_to_gui_parse_results (self, inn, r2):
 
+        #убрать старые результаты
+        self.second_parse_clear_results()
         # вот тут парсер
         if len(inn) == 10 or len(inn) == 13:
             nameOOO = str(r2['rows'][0]['c'])  # название контрагента ООО "КТото"
@@ -102,59 +111,66 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.lineEdit_number_dogovor.setText(f'{self.last_record} {self.choice_my_organization}')
         self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
     def save_to_excel(self):
+        try:
+            # print(str('A') + str(last_record)) # номер ячейки
+            # ячейка А
+            dogovor_excel_formula = str('=CONCATENATE(' + str("S" + str(self.last_record))) + str('," Договор № ",E') + str(
+                self.last_record) + str('," от ",TEXT(F') + str(self.last_record) + str(',"ДД.ММ.ГГ "),D') + str(self.last_record) + str(
+                ')')
+            self.ws[str('A') + str(self.last_record)] = dogovor_excel_formula
 
-        # print(str('A') + str(last_record)) # номер ячейки
-        # ячейка А
-        dogovor_excel_formula = str('=CONCATENATE(' + str("S" + str(self.last_record))) + str('," Договор № ",E') + str(
-            self.last_record) + str('," от ",TEXT(F') + str(self.last_record) + str(',"ДД.ММ.ГГ "),D') + str(self.last_record) + str(
-            ')')
-        self.ws[str('A') + str(self.last_record)] = dogovor_excel_formula
+            # ячейки парсера забираем из введенного текста в форму
+            self.ws[str('D') + str(self.last_record)] = self.lineEdit_NAME_organization.text()
+            self.ws[str('J') + str(self.last_record)] = self.lineEdit_form.text()
+            self.ws[str('L') + str(self.last_record)] = self.lineEdit_seo_director_position.text()
+            self.ws[str('N') + str(self.last_record)] = self.lineEdit_seo_name.text()
+            self.ws[str('V') + str(self.last_record)] = self.kppOOO
+            self.ws[str('W') + str(self.last_record)] = self.textEdit_adress.toPlainText()
+            self.ws[str('U') + str(self.last_record)] = self.ogrnOOO
+            self.ws[str('T') + str(self.last_record)] = self.innOOO
 
-        # ячейки парсера забираем из введенного текста в форму
-        self.ws[str('D') + str(self.last_record)] = self.lineEdit_NAME_organization.text()
-        self.ws[str('J') + str(self.last_record)] = self.lineEdit_form.text()
-        self.ws[str('L') + str(self.last_record)] = self.lineEdit_seo_director_position.text()
-        self.ws[str('N') + str(self.last_record)] = self.lineEdit_seo_name.text()
-        self.ws[str('V') + str(self.last_record)] = self.kppOOO
-        self.ws[str('W') + str(self.last_record)] = self.textEdit_adress.toPlainText()
-        self.ws[str('U') + str(self.last_record)] = self.ogrnOOO
-        self.ws[str('T') + str(self.last_record)] = self.innOOO
+            # остальные ячейки заполенные в qtDesigner
+            self.ws[str('B') + str(self.last_record)] = self.comboBox_original.currentText()
+            self.ws[str('E') + str(self.last_record)] = self.lineEdit_number_dogovor.text()
+            self.ws[str('F') + str(self.last_record)] = self.lineEdit_date.text()
+            self.ws[str('G') + str(self.last_record)] = self.lineEdit_name_dogovor.text()
+            self.ws[str('R') + str(self.last_record)] = self.lineEdit_ustav.text()
 
-        # остальные ячейки заполенные в qtDesigner
-        self.ws[str('B') + str(self.last_record)] = self.comboBox_original.currentText()
-        self.ws[str('E') + str(self.last_record)] = self.lineEdit_number_dogovor.text()
-        self.ws[str('F') + str(self.last_record)] = self.lineEdit_date.text()
-        self.ws[str('G') + str(self.last_record)] = self.lineEdit_name_dogovor.text()
-        self.ws[str('R') + str(self.last_record)] = self.lineEdit_ustav.text()
+            # ячейки формулы excel
+            cell_k = '=IF(JXXX="ООО ","Общество с ограниченной ответственностью",IF(JXXX="АО ","Акционерное общество",IF(JXXX="НАО ","Непубличное кционерное общество",IF(JXXX="ПАО ","Публичное акционерное общество",IF(JXXX="ИП","Индивидуальный предприниматель",JXXX)))))'
+            cell_k_change = re.sub(r'XXX', str(self.last_record), cell_k)
+            self.ws[str('K') + str(self.last_record)] = cell_k_change
 
-        # ячейки формулы excel
-        cell_k = '=IF(JXXX="ООО ","Общество с ограниченной ответственностью",IF(JXXX="АО ","Акционерное общество",IF(JXXX="НАО ","Непубличное кционерное общество",IF(JXXX="ПАО ","Публичное акционерное общество",IF(JXXX="ИП","Индивидуальный предприниматель",JXXX)))))'
-        cell_k_change = re.sub(r'XXX', str(self.last_record), cell_k)
-        self.ws[str('K') + str(self.last_record)] = cell_k_change
+            cell_m = str('=IF(LYYY="Директор","директора",IF(LYYY="Генеральный директор","генерального директора",LYYY))')
+            cell_m_change = re.sub(r'YYY', str(self.last_record), cell_m)
+            self.ws[str('M') + str(self.last_record)] = str(cell_m_change)
 
-        cell_m = str('=IF(LYYY="Директор","директора",IF(LYYY="Генеральный директор","генерального директора",LYYY))')
-        cell_m_change = re.sub(r'YYY', str(self.last_record), cell_m)
-        self.ws[str('M') + str(self.last_record)] = str(cell_m_change)
+            cell_o = '=LEFT(NUUU,SEARCH(" *",NUUU)-1)&" "&MID(NUUU,SEARCH(" *",NUUU)+1,1)&"."&MID(NUUU,SEARCH(" *",NUUU,SEARCH(" *",NUUU)+1)+1,1)&"."'
+            cell_o_change = re.sub(r'UUU', str(self.last_record), cell_o)
+            self.ws[str('O') + str(self.last_record)] = str(cell_o_change)
 
-        cell_o = '=LEFT(NUUU,SEARCH(" *",NUUU)-1)&" "&MID(NUUU,SEARCH(" *",NUUU)+1,1)&"."&MID(NUUU,SEARCH(" *",NUUU,SEARCH(" *",NUUU)+1)+1,1)&"."'
-        cell_o_change = re.sub(r'UUU', str(self.last_record), cell_o)
-        self.ws[str('O') + str(self.last_record)] = str(cell_o_change)
+            cell_p = '=GenitiveCaseInCell1(NFFF)'
+            cell_p_change = re.sub(r'FFF', str(self.last_record), cell_p)
+            self.ws[str('P') + str(self.last_record)] = str(cell_p_change)
 
-        cell_p = '=GenitiveCaseInCell1(NFFF)'
-        cell_p_change = re.sub(r'FFF', str(self.last_record), cell_p)
-        self.ws[str('P') + str(self.last_record)] = str(cell_p_change)
+            cell_q = '=IF(RIGHT(NZZZ,1)="ч","его","ей")'
+            cell_q_change = re.sub(r'ZZZ', str(self.last_record), cell_q)
+            self.ws[str('Q') + str(self.last_record)] = str(cell_q_change)
+            self.ws[str('R') + str(self.last_record)] = 'Устава'
+            self.ws[str('S') + str(self.last_record)] = str(f'{self.last_record:05}')
 
-        cell_q = '=IF(RIGHT(NZZZ,1)="ч","его","ей")'
-        cell_q_change = re.sub(r'ZZZ', str(self.last_record), cell_q)
-        self.ws[str('Q') + str(self.last_record)] = str(cell_q_change)
-        self.ws[str('R') + str(self.last_record)] = 'Устава'
-        self.ws[str('S') + str(self.last_record)] = str(f'{self.last_record:05}')
+            # Сохраняем файл
+            self.wb.save(self.selected_xlsm)
 
-        # Сохраняем файл
-        self.wb.save(self.selected_xlsm)
-
-        print("Текст сохранен в ячейке A1")
-        print(self.innOOO)
+            self.lineEdit_result.setText('Успешно записано в excel')
+            self.timer = QTimer(self)
+            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
+            self.timer.timeout.connect(lambda: self.lineEdit_result.clear()) # labmda чтобы не создавать отдельную функцию
+        except:
+            self.lineEdit_result.setText('Сначала подтверди ввод ИНН')
+            self.timer = QTimer(self)
+            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
+            self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
 
     def show_error_notification(self):
         error_box = QMessageBox()  # Создаем окно уведомления
@@ -162,6 +178,13 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         error_box.setWindowTitle("Ошибка")  # Устанавливаем заголовок окна
         error_box.setText("Ошибка в номере ИНН/ОГРН. Исправьте")  # Устанавливаем текст ошибки
         error_box.exec_()  # Показываем окно уведомления и блокируем основное окно приложения
+
+    def second_parse_clear_results(self):
+        self.lineEdit_NAME_organization.clear()
+        self.lineEdit_form.clear()
+        self.lineEdit_seo_director_position.clear()
+        self.lineEdit_seo_name.clear()
+        self.textEdit_adress.clear()
 
 
 app = QApplication(sys.argv)
