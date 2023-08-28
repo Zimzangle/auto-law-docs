@@ -39,10 +39,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
                 print('Ошибка в ИНН/ОГРН. Попробуйте еще раз')
                 self.show_error_notification()
         except:
-            self.lineEdit_result.setText('Ошибка. Возможно, в ИНН введены буквы')
-            self.timer = QTimer(self)
-            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
-            self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
+            message = ('Ошибка. Возможно, в ИНН введены буквы')
+            self.message_to_user(message)
 
     def parse(self, inn):
         # сам парсинг
@@ -162,15 +160,12 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             # Сохраняем файл
             self.wb.save(self.selected_xlsm)
 
-            self.lineEdit_result.setText('Успешно записано в excel')
-            self.timer = QTimer(self)
-            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
-            self.timer.timeout.connect(lambda: self.lineEdit_result.clear()) # labmda чтобы не создавать отдельную функцию
+            message = ('Успешно записано в excel')
+            self.message_to_user(message)
+
         except:
-            self.lineEdit_result.setText('Сначала подтверди ввод ИНН')
-            self.timer = QTimer(self)
-            self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
-            self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
+            message = ('Сначала подтверди ввод ИНН')
+            self.message_to_user(message)
 
     def show_error_notification(self):
         error_box = QMessageBox()  # Создаем окно уведомления
@@ -185,6 +180,12 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.lineEdit_seo_director_position.clear()
         self.lineEdit_seo_name.clear()
         self.textEdit_adress.clear()
+
+    def message_to_user(self, message):
+        self.lineEdit_result.setText(message)
+        self.timer = QTimer(self)
+        self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
+        self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
 
 
 app = QApplication(sys.argv)
