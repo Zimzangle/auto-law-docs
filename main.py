@@ -36,7 +36,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             if len(inn) == 10 or len(inn) == 12 or len(inn) == 13 or len(inn) == 15:
                 self.parse(inn)
             else:
-                message_error = ('Ошибка в номере ИНН/ОГРН. Исправьте')
+                message_error = ('ИНН/ОГРН введен неверно. Исправьте')
                 self.show_error_notification(message_error)
         except:
             message_error = ('Ошибка. Возможно, в ИНН введены буквы')
@@ -112,7 +112,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         try:
             # print(str('A') + str(last_record)) # номер ячейки
             # ячейка А
-            cell_a = str('=CONCATENATE(SXXX, " Договор № ", EXXX, " от ", TEXT(FXXX, "ДД.ММ.ГГ "), DXXX)')
+            cell_a = '=CONCATENATE(SXXX, " Договор № ", EXXX, " от ", TEXT(FXXX, "ДД.ММ.ГГ "), DXXX)'
             cell_a_change = re.sub(r'XXX', str(self.last_record), cell_a)
             self.ws[f'{"A"}{self.last_record}'] = cell_a_change
 
@@ -138,7 +138,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             cell_k_change = re.sub(r'XXX', str(self.last_record), cell_k)
             self.ws[f'{"K"}{self.last_record}'] = cell_k_change
 
-            cell_m = str('=IF(LXXX="Директор","директора",IF(LXXX="Генеральный директор","генерального директора",LXXX))')
+            cell_m = '=IF(LXXX="Директор","директора",IF(LXXX="Генеральный директор","генерального директора",LXXX))'
             cell_m_change = re.sub(r'XXX', str(self.last_record), cell_m)
             self.ws[f'{"M"}{self.last_record}'] = str(cell_m_change)
 
@@ -163,7 +163,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             self.message_to_user(message)
 
         except:
-            message_error = ('Сначала подтверди ввод ИНН или закрой excel файл, который сейчас открыт')
+            message_error = 'Закрой excel файл с реестром, который сейчас открыт\nили\nНе была нажата кнопка "Подтвердить вввод ИНН"'
             self.show_error_notification(message_error)
 
     def show_error_notification(self, message_error):
