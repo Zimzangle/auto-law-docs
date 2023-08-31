@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>595</height>
+    <width>828</width>
+    <height>675</height>
    </rect>
   </property>
   <property name="font">
@@ -22,19 +22,9 @@
    <widget class="QLineEdit" name="lineEdit_INN_QT_INPUT">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>70</y>
       <width>211</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_NAME_organization">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>130</y>
-      <width>321</width>
       <height>31</height>
      </rect>
     </property>
@@ -42,7 +32,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>50</x>
       <y>50</y>
       <width>121</width>
       <height>20</height>
@@ -55,8 +45,8 @@
    <widget class="QPushButton" name="pushButton_Record_to_Excel">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>450</y>
+      <x>560</x>
+      <y>520</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -68,9 +58,9 @@
    <widget class="QPushButton" name="pushButton_Parse">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>70</y>
-      <width>141</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -84,9 +74,9 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>310</x>
       <y>10</y>
-      <width>141</width>
+      <width>201</width>
       <height>21</height>
      </rect>
     </property>
@@ -96,105 +86,41 @@
      </font>
     </property>
     <property name="text">
-     <string>Реестр договоров</string>
+     <string>Реестр договоров и писем</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>10</y>
+      <x>580</x>
+      <y>0</y>
       <width>231</width>
       <height>16</height>
      </rect>
     </property>
-    <property name="text">
-     <string>© created by Nikolai Slesarenko, pixelpravo.ru,</string>
+    <property name="font">
+     <font>
+      <underline>true</underline>
+     </font>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>110</y>
-      <width>311</width>
-      <height>16</height>
-     </rect>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: blue;</string>
     </property>
     <property name="text">
-     <string>Название организации / ФИО ИП</string>
+     <string>&lt;a href=&quot;https://www.pixelpravo.ru&quot;&gt;© created by Nikolai Slesarenko, pixelpravo.ru&lt;/a&gt;</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>180</y>
-      <width>101</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ФИО руководителя</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_11">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>250</y>
-      <width>141</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Должность руководителя</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>250</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Дата договора</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_18">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>170</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Адрес</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>250</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Номер договора</string>
+    <property name="openExternalLinks">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>30</y>
+      <x>660</x>
+      <y>20</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -203,74 +129,11 @@
      <string>3221208@mail.ru</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_date">
-    <property name="geometry">
-     <rect>
-      <x>32</x>
-      <y>270</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_form">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>130</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_12">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>110</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Форма общетсва</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit_adress">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>190</y>
-      <width>321</width>
-      <height>61</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_seo_name">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>200</y>
-      <width>261</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_seo_director_position">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>270</y>
-      <width>261</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QComboBox" name="comboBox_xslm_choice">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>420</y>
+      <x>70</x>
+      <y>130</y>
       <width>191</width>
       <height>22</height>
      </rect>
@@ -279,8 +142,8 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>400</y>
+      <x>110</x>
+      <y>110</y>
       <width>121</width>
       <height>16</height>
      </rect>
@@ -289,92 +152,24 @@
      <string>Выбирите excel файл</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_number_dogovor">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>270</y>
-      <width>201</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>310</y>
-      <width>141</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Устав или доверенность</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>310</y>
-      <width>101</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Название договора</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>390</y>
-      <width>61</width>
-      <height>16</height>
+      <x>550</x>
+      <y>440</y>
+      <width>141</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Оригиналы</string>
+     <string>Что сделано с документом</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_name_dogovor">
+   <widget class="QComboBox" name="comboBox_docfate">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>330</y>
-      <width>331</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>поставки товаров и услуг</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_ustav">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>340</y>
-      <width>261</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string>Устава</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_original">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>420</y>
+      <x>510</x>
+      <y>470</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -384,7 +179,7 @@
     </property>
     <item>
      <property name="text">
-      <string>Направлены по электронной почте</string>
+      <string>Направлен по электронной почте</string>
      </property>
     </item>
     <item>
@@ -394,20 +189,20 @@
     </item>
     <item>
      <property name="text">
-      <string>Передано нарочно</string>
+      <string>Передан нарочно</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Оригинал</string>
+      <string>Оригинал получен</string>
      </property>
     </item>
    </widget>
    <widget class="QLineEdit" name="lineEdit_result">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>510</y>
+      <x>450</x>
+      <y>570</y>
       <width>331</width>
       <height>20</height>
      </rect>
@@ -416,8 +211,8 @@
    <widget class="QLabel" name="label_15">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>490</y>
+      <x>550</x>
+      <y>550</y>
       <width>121</width>
       <height>16</height>
      </rect>
@@ -426,18 +221,553 @@
      <string>Результат выплнения</string>
     </property>
    </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>180</y>
+      <width>361</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Организации</string>
+     </attribute>
+     <widget class="QTextEdit" name="textEdit_adress">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>321</width>
+        <height>61</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_NAME_organization">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>10</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Название организации</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>60</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Адрес</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_seo_director_position">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>280</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>140</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Форма общетсва</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_form">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>260</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Должность руководителя</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>200</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ФИО руководителя</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_seo_name">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_ustav">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>350</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Устава</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>320</y>
+        <width>141</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Устав или доверенность</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Индивидуальные предприниматели</string>
+     </attribute>
+     <widget class="QLineEdit" name="lineEdit_NAME_organization_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>10</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ФИО ИП</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit_adress_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>321</width>
+        <height>61</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>70</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Адрес</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_20">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>160</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Паспорт</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit_pasport">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>180</y>
+        <width>321</width>
+        <height>61</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>250</y>
+      <width>351</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Договоры</string>
+     </attribute>
+     <widget class="QTextEdit" name="textEdit_bill">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>321</width>
+        <height>71</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Реквизиты счета</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>110</y>
+        <width>171</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Электронная почта получателя</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_number_email">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>130</y>
+        <width>321</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Письма и претензии</string>
+     </attribute>
+     <widget class="QLineEdit" name="lineEdit_date_2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>30</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_23">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>201</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Сумма задолженности для претензии</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QComboBox" name="comboBox_type_doc">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>120</y>
+      <width>341</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_number_docs">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>70</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_date">
+    <property name="geometry">
+     <rect>
+      <x>442</x>
+      <y>70</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>50</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Дата документа</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>50</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Номер документа</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>100</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Тип документа</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>230</y>
+      <width>141</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Дополнительные сведения</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>40</y>
+      <width>20</width>
+      <height>561</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>30</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_24">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Буквенный код своей организации из config.ini раздел [Letter code]</string>
+    </property>
+    <property name="text">
+     <string>Буквенный код</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_letter_code">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>70</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_25">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>160</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Название документа</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_name_doc">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>180</y>
+      <width>341</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>828</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Настройки</string>
+    </property>
+    <addaction name="action_settings"/>
+   </widget>
+   <widget class="QMenu" name="menu_excel">
+    <property name="title">
+     <string>Открыть excel</string>
+    </property>
+    <addaction name="action_open_excel"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Инструкция</string>
+    </property>
+    <addaction name="action_readme"/>
+   </widget>
+   <addaction name="menu_excel"/>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action123">
+   <property name="text">
+    <string>123</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="text">
+    <string>Открыть настройки</string>
+   </property>
+  </action>
+  <action name="action_open_excel">
+   <property name="text">
+    <string>Открыть excel</string>
+   </property>
+  </action>
+  <action name="action_readme">
+   <property name="text">
+    <string>Открыть инструкцию</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

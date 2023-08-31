@@ -2,15 +2,17 @@ import requests
 import re
 import os
 import sys
-from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox
-from PyQt5.QtCore import QTimer
+import configparser
+from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox, QAction, QLabel
+from PyQt5.QtCore import QTimer, QUrl
+from PyQt5.QtGui import QDesktopServices
 from a_gui_from_ui import *
 from datetime import datetime
 from openpyxl import load_workbook
 
 
 # запускаем гуй после конвертации ui в py
-class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
+class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAction):
     def __init__(self):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
@@ -26,10 +28,22 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.excel_start()
         self.comboBox_xslm_choice.currentIndexChanged.connect(self.excel_start)
 
+        # menu bar добавить фукнционал для возможности открыть конфиг и др вкладки
+        self.action_settings.triggered.connect(lambda: os.startfile("config.ini"))
+        # открыть реестр (который активен сейчас)
+        self.action_open_excel.triggered.connect(lambda: os.startfile(self.selected_xlsm))
+        self.action_readme.triggered.connect(lambda: os.startfile("readme.txt"))
+
+        self.config_settings()
+
+        # ссылка на pixelpravo
+        self.label_4.linkActivated.connect(lambda url: QDesktopServices.openUrl(QUrl(url)))
+
 
     def inn_check(self):
         try:
             inn = self.lineEdit_INN_QT_INPUT.text()
+            self.inn2 = inn # костыль чтобы не переписывать код
 
             # проверка правильности ввода ИНН
 
@@ -80,10 +94,17 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
             self.innOOO = str(r2['rows'][0]['i'])
             self.ogrnOOO = str(r2['rows'][0]['o'])
             self.kppOOO = str(r2['rows'][0]['p'])
+
+            # переключение на 1 вкладку для ИП
+            self.tabWidget.setCurrentIndex(0)
         # для ИП
         elif len(inn) == 12 or len(inn) == 15:
+
+            # переключение на 2 вкладку для ИП
+            self.tabWidget.setCurrentIndex(1)
+
             nameOOO = str.title(r2['rows'][0]['n'])  # str.title - первая буква заглавнаяу ФИО ИП
-            self.lineEdit_NAME_organization.setText(nameOOO)
+            self.lineEdit_NAME_organization_2.setText(nameOOO)
             self.kppOOO = str('')
             self.ogrnOOO = str(r2['rows'][0]['o'])
             self.innOOO = str(r2['rows'][0]['i'])
@@ -106,31 +127,39 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.ws = self.wb['BD']  # имя листа
         self.last_record = (int(self.ws.max_row) + 1)  # найти номер незаполненной строки
 
-        self.lineEdit_number_dogovor.setText(f'{self.last_record} {self.choice_my_organization}')
+        self.lineEdit_number_docs.setText(f'{self.last_record}')
         self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
     def save_to_excel(self):
         try:
             # print(str('A') + str(last_record)) # номер ячейки
             # ячейка А
-            cell_a = '=CONCATENATE(SXXX, " Договор № ", EXXX, " от ", TEXT(FXXX, "ДД.ММ.ГГ "), DXXX)'
+            cell_a = '=CONCATENATE(SXXX, " ",GXXX," № ", EXXX, " ", IXXX, " от ", TEXT(FXXX, "ДД.ММ.ГГ "), DXXX)'
             cell_a_change = re.sub(r'XXX', str(self.last_record), cell_a)
             self.ws[f'{"A"}{self.last_record}'] = cell_a_change
 
             # ячейки парсера забираем из введенного текста в форму
-            self.ws[f'{"D"}{self.last_record}'] = self.lineEdit_NAME_organization.text()
+            if len(self.inn2) == 10 or len(self.inn2) == 13:
+                self.ws[f'{"D"}{self.last_record}'] = self.lineEdit_NAME_organization.text()
+                self.ws[f'{"W"}{self.last_record}'] = self.textEdit_adress.toPlainText()
+            elif len(self.inn2) == 12 or len(self.inn2) == 15:
+                self.ws[f'{"D"}{self.last_record}'] = self.lineEdit_NAME_organization_2.text()
+                self.ws[f'{"W"}{self.last_record}'] = self.textEdit_adress_2.toPlainText()
+
             self.ws[f'{"J"}{self.last_record}'] = self.lineEdit_form.text()
             self.ws[f'{"L"}{self.last_record}'] = self.lineEdit_seo_director_position.text()
             self.ws[f'{"N"}{self.last_record}'] = self.lineEdit_seo_name.text()
             self.ws[f'{"V"}{self.last_record}'] = self.kppOOO
-            self.ws[f'{"W"}{self.last_record}'] = self.textEdit_adress.toPlainText()
+
             self.ws[f'{"U"}{self.last_record}'] = self.ogrnOOO
             self.ws[f'{"T"}{self.last_record}'] = self.innOOO
 
             # остальные ячейки заполенные в qtDesigner
-            self.ws[f'{"B"}{self.last_record}'] = self.comboBox_original.currentText()
-            self.ws[f'{"E"}{self.last_record}'] = self.lineEdit_number_dogovor.text()
+            self.ws[f'{"B"}{self.last_record}'] = self.comboBox_docfate.currentText()
+            self.ws[f'{"E"}{self.last_record}'] = self.lineEdit_number_docs.text()
             self.ws[f'{"F"}{self.last_record}'] = self.lineEdit_date.text()
-            self.ws[f'{"G"}{self.last_record}'] = self.lineEdit_name_dogovor.text()
+            self.ws[f'{"G"}{self.last_record}'] = self.comboBox_type_doc.currentText()
+            self.ws[f'{"H"}{self.last_record}'] = self.comboBox_name_doc.currentText()
+            self.ws[f'{"I"}{self.last_record}'] = self.comboBox_letter_code.currentText()
             self.ws[f'{"R"}{self.last_record}'] = self.lineEdit_ustav.text()
 
             # ячейки формулы excel
@@ -140,26 +169,37 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
 
             cell_m = '=IF(LXXX="Директор","директора",IF(LXXX="Генеральный директор","генерального директора",LXXX))'
             cell_m_change = re.sub(r'XXX', str(self.last_record), cell_m)
-            self.ws[f'{"M"}{self.last_record}'] = str(cell_m_change)
+            self.ws[f'{"M"}{self.last_record}'] = cell_m_change
 
             cell_o = '=LEFT(NXXX,SEARCH(" *",NXXX)-1)&" "&MID(NXXX,SEARCH(" *",NXXX)+1,1)&"."&MID(NXXX,SEARCH(" *",NXXX,SEARCH(" *",NXXX)+1)+1,1)&"."'
             cell_o_change = re.sub(r'XXX', str(self.last_record), cell_o)
-            self.ws[f'{"O"}{self.last_record}'] = str(cell_o_change)
+            self.ws[f'{"O"}{self.last_record}'] = cell_o_change
 
             cell_p = '=GenitiveCaseInCell1(NXXX)'
             cell_p_change = re.sub(r'XXX', str(self.last_record), cell_p)
-            self.ws[f'{"P"}{self.last_record}'] = str(cell_p_change)
+            self.ws[f'{"P"}{self.last_record}'] = cell_p_change
 
             cell_q = '=IF(RIGHT(NXXX,1)="ч","его","ей")'
             cell_q_change = re.sub(r'XXX', str(self.last_record), cell_q)
-            self.ws[f'{"Q"}{self.last_record}'] = str(cell_q_change)
+            self.ws[f'{"Q"}{self.last_record}'] = cell_q_change
             self.ws[f'{"R"}{self.last_record}'] = 'Устава'
             self.ws[f'{"S"}{self.last_record}'] = f'{self.last_record:05}'
+
+            # для писем и претензий
+            cell_x = '=IF(LXXX="Директор","Директору",IF(LXXX="Генеральный директор","Генеральному директору",LXXX))'
+            cell_x_change = re.sub(r'XXX', str(self.last_record), cell_x)
+            self.ws[f'{"X"}{self.last_record}'] = cell_x_change
+
+            self.ws[f'{"Y"}{self.last_record}'] = f'{"=DativeCase(N"}{self.last_record}{")"}'
+
+            cell_z = '=LEFT(YXXX,SEARCH(" *",YXXX)-1)&" "&MID(YXXX,SEARCH(" *",YXXX)+1,1)&"."&MID(YXXX,SEARCH(" *",YXXX,SEARCH(" *",YXXX)+1)+1,1)&"."'
+            cell_z_change = re.sub(r'XXX', str(self.last_record), cell_z)
+            self.ws[f'{"Z"}{self.last_record}'] = cell_z_change
 
             # Сохраняем файл
             self.wb.save(self.selected_xlsm)
 
-            message = ('Успешно записано в excel')
+            message = f'Успешно записано в excel  {self.choice_my_organization}'
             self.message_to_user(message)
 
         except:
@@ -186,6 +226,20 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox):
         self.timer.start(5000)  # 5000 миллисекунд (5 секунд)
         self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
 
+    def config_settings(self):
+        # Чтение значений из конфигурационного файла
+        config = configparser.ConfigParser()
+        config.read('config.ini', encoding='utf-8')
+        combo_values_letter = config['Letter Code']
+        combo_values_doctype = config['Doc Type']
+        combo_values_docname = config['Doc Name']
+        combo_values_docfate = config['Doc Fate']
+
+        # Добавление значений в QComboBox
+        self.comboBox_letter_code.addItems(combo_values_letter.values())
+        self.comboBox_type_doc.addItems(combo_values_doctype.values())
+        self.comboBox_name_doc.addItems(combo_values_docname.values())
+        self.comboBox_docfate.addItems(combo_values_docfate.values())
 
 app = QApplication(sys.argv)
 window = Mywindow()
