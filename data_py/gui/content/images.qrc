@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="telegram">
+    <file>instagram.png</file>
+    <file>telegram.jpg</file>
+  </qresource>
+</RCC>
