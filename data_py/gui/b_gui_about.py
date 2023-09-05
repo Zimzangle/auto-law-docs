@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'untitled_b.ui'
+# Form implementation generated from reading ui file 'data_py/gui/untitled_b.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -114,4 +114,3 @@ class Ui_Form_about(object):
 "<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- вывод списка судебных споров после добавления ИНН (с целью оценки рисков) </span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Form_about", "Дальнейшая разработка"))
         self.label_3.setText(_translate("Form_about", "Zimzangle: Реестр договоров и писем"))
-

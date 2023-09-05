@@ -9,7 +9,7 @@ import data_py.gui.content_gui_images.qrcode_rc
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
 
-from PyQt5.QtWidgets import QMessageBox, QComboBox, QAction
+from PyQt5.QtWidgets import QMessageBox, QComboBox, QAction, QTextBrowser, QWidget, QLineEdit
 from PyQt5.QtCore import QTimer, QUrl
 from PyQt5.QtGui import QDesktopServices
 from datetime import datetime
@@ -32,9 +32,12 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.pushButton_cancel_record.clicked.connect(self.cancel_record)
         self.pushButton_donation.clicked.connect(self.openAboutWindow)
         self.checkBox_no_parser.stateChanged.connect(self.no_parser)
+        self.checkBox_number.stateChanged.connect(self.excel_start)
+        self.pushButton_open_excel.clicked.connect(lambda: os.startfile(self.selected_xlsm))
 
         # для выбора xlsm файла
         self.add_files_to_combo()
+        self.config_settings()
         self.excel_start()
         self.comboBox_xslm_choice.currentIndexChanged.connect(self.excel_start)
 
@@ -46,11 +49,12 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.action_clear_inn.triggered.connect(self.second_parse_clear_results)
         self.action_clear_default.triggered.connect(self.clear_default)
         self.action_clear_all.triggered.connect(self.clear_all)
-        self.config_settings()
+
 
 
         self.action_readme.triggered.connect(lambda: os.startfile("readme.txt"))
         self.action_info_author.triggered.connect(self.openAboutWindow)
+        self.action_text_for_letter.triggered.connect(self.letter_for_contractor)
 
 
         self.actionTelegram.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://t.me/pixelpravo")))
@@ -141,7 +145,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
                 self.comboBox_xslm_choice.addItem(filename)
     def excel_start(self):
         self.selected_xlsm = self.comboBox_xslm_choice.currentText()
-        self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', self.selected_xlsm)[1]  # найти текст между пробелом и точкой а [1] убирает пробел
+
+        self.check_number()
 
         self.wb = load_workbook(self.selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
         self.ws = self.wb['BD']  # имя листа
@@ -149,6 +154,16 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
         self.lineEdit_number_docs.setText(f'{self.last_record} {self.choice_my_organization}')
         self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
+
+
+    def check_number(self):
+        if self.checkBox_number.isChecked():
+            index = self.comboBox_xslm_choice.currentIndex()
+            selected_item = self.config.get('Alphabit Code', f'item{index}')
+            self.choice_my_organization = selected_item
+        else:
+            self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', self.selected_xlsm)[1]  # найти текст между пробелом и точкой а [1] убирает пробел
+
     def save_to_excel(self):
         try:
             # print(str('A') + str(last_record)) # номер ячейки
@@ -297,11 +312,18 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
     def config_settings(self):
         # Чтение значений из конфигурационного файла
-        config = configparser.ConfigParser()
-        config.read('data_py\config.ini', encoding='utf-8')
-        combo_values_doctype = config['Doc Type']
-        combo_values_docname = config['Doc Name']
-        combo_values_docfate = config['Doc Fate']
+        self.config = configparser.ConfigParser()
+        self.config.read('data_py\config.ini', encoding='utf-8')
+        combo_values_doctype = self.config['Doc Type']
+        combo_values_docname = self.config['Doc Name']
+        combo_values_docfate = self.config['Doc Fate']
+
+        #основное - текст для отправки письма
+        self.combo_values_letter = []
+        for key in self.config['Doc Message']:
+            self.combo_values_letter.append(self.config['Doc Message'][key])
+        self.combo_values_letter = "\n\n".join(self.combo_values_letter)
+
 
         # Добавление значений в QComboBox
         self.comboBox_type_doc.addItems(combo_values_doctype.values())
@@ -320,3 +342,10 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.about_window = AboutWindow()
         self.about_window.show()
 
+    def letter_for_contractor(self):
+        self.new_window = QWidget()
+        self.new_window.setWindowTitle('Новое окно с QLineEdit')
+        line_edit = QTextBrowser(self.new_window)
+        line_edit.setGeometry(100, 100, 400, 400)
+        line_edit.setText(self.combo_values_letter)
+        self.new_window.show()
