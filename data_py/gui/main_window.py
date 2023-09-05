@@ -1,7 +1,7 @@
 import requests
 import re
 import os
-import sys
+
 import configparser
 
 import data_py.gui.content_gui_images.qrcode_rc
@@ -9,7 +9,7 @@ import data_py.gui.content_gui_images.qrcode_rc
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
 
-from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox, QAction
+from PyQt5.QtWidgets import QMessageBox, QComboBox, QAction
 from PyQt5.QtCore import QTimer, QUrl
 from PyQt5.QtGui import QDesktopServices
 from datetime import datetime
@@ -320,8 +320,3 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.about_window = AboutWindow()
         self.about_window.show()
 
-
-app = QApplication(sys.argv)
-window = Mywindow()
-window.show()
-sys.exit(app.exec_())
