@@ -4,7 +4,7 @@ import os
 import sys
 import configparser
 
-import data_py.gui.content.qrcode_rc
+import data_py.gui.content_gui_images.qrcode_rc
 
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
