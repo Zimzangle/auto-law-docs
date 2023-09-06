@@ -1,13 +1,11 @@
 import requests
 import re
-import os
-
 import configparser
+import os
 
 import data_py.gui.content_gui_images.qrcode_rc
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
-
 
 from PyQt5.QtWidgets import QMessageBox, QComboBox, QAction, QTextBrowser, QWidget
 from PyQt5.QtCore import QTimer, QUrl
@@ -343,8 +341,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
     def letter_for_contractor(self):
         self.new_window = QWidget()
-        self.new_window.setWindowTitle('Новое окно с QLineEdit')
+        self.new_window.setWindowTitle('Текст для отправки письма')
         line_edit = QTextBrowser(self.new_window)
-        line_edit.setGeometry(100, 100, 400, 400)
+        line_edit.setGeometry(100, 100, 300, 300)
         line_edit.setText(self.combo_values_letter)
         self.new_window.show()

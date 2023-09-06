@@ -15,6 +15,7 @@ class Ui_Form_about(object):
     def setupUi(self, Form_about):
         Form_about.setObjectName("Form_about")
         Form_about.resize(678, 428)
+        Form_about.setStyleSheet("")
         self.tabWidget = QtWidgets.QTabWidget(Form_about)
         self.tabWidget.setGeometry(QtCore.QRect(50, 60, 581, 291))
         self.tabWidget.setObjectName("tabWidget")
@@ -110,7 +111,9 @@ class Ui_Form_about(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">Возможно следующее развитие программы:</span></p>\n"
-"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- автоматическое заполнение различных документов (ходатайств, заявлений, исков, протоколов и пр.) с добавлением базы на SQL</span></p>\n"
-"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- вывод списка судебных споров после добавления ИНН (с целью оценки рисков) </span></p></body></html>"))
+"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- автоматическое заполнение различных документов (ходатайств, заявлений, исков, протоколов и пр.)</span></p>\n"
+"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- вывод списка судебных споров после добавления ИНН (с целью оценки рисков) </span></p>\n"
+"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- замена excel на sql</span></p>\n"
+"<p align=\"justify\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">- другое направление, которое придёт на ум</span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Form_about", "Дальнейшая разработка"))
         self.label_3.setText(_translate("Form_about", "Zimzangle: Реестр договоров и писем"))
