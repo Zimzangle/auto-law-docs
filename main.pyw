@@ -13,7 +13,7 @@ try:
         sys.exit(app.exec_())
 
     if __name__ == "__main__":
-        current_directory = os.path.join(os.path.expanduser('~'), 'Desktop', 'Реестры')
+        current_directory = os.getcwd()
         main()
 
 except Exception as e:
