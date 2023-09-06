@@ -1,4 +1,4 @@
-Created by Nikolai Slesarenko, telegram: @zimzangle, pixelpravo.ru, 3221208@mail.ru
+Created by Nikolai Slesarenko, telegram: @zimzangle, www.pixelpravo.ru, 3221208@mail.ru
 ----------------------------------------------------------------------------------------
 Требования
 1) excel 2019
