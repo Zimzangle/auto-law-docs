@@ -51,8 +51,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.action_clear_all.triggered.connect(self.clear_all)
 
 
+        self.action_readme.triggered.connect(lambda: os.startfile("data_py\help.txt"))
 
-        self.action_readme.triggered.connect(lambda: os.startfile("readme.txt"))
         self.action_info_author.triggered.connect(self.openAboutWindow)
         self.action_text_for_letter.triggered.connect(self.letter_for_contractor)
 
@@ -141,24 +141,30 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
             if filename.endswith(".xlsm"):
                 self.comboBox_xslm_choice.addItem(filename)
     def excel_start(self):
-        self.selected_xlsm = self.comboBox_xslm_choice.currentText()
+        try:
+            self.selected_xlsm = self.comboBox_xslm_choice.currentText()
 
-        self.check_number()
+            self.check_number()
 
-        self.wb = load_workbook(f'{self.current_directory}\{self.selected_xlsm}', read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
-        self.ws = self.wb['BD']  # имя листа
-        self.last_record = (int(self.ws.max_row) + 1)  # найти номер незаполненной строки
+            self.wb = load_workbook(f'{self.current_directory}\{self.selected_xlsm}', read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
+            self.ws = self.wb['BD']  # имя листа
+            self.last_record = (int(self.ws.max_row) + 1)  # найти номер незаполненной строки
 
-        self.lineEdit_number_docs.setText(f'{self.last_record} {self.choice_my_organization}')
-        self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
-
+            self.lineEdit_number_docs.setText(f'{self.last_record} {self.choice_my_organization}')
+            self.lineEdit_date.setText(datetime.today().strftime('%d.%m.%Y'))
+        except:
+            message_error = 'Выбран файл, начинающийся с ~'
+            self.show_error_notification(message_error)
 
     def check_number(self):
-        if self.checkBox_number.isChecked():
-            index = self.comboBox_xslm_choice.currentIndex()
-            selected_item = self.config.get('Alphabit Code', f'item{index}')
-            self.choice_my_organization = selected_item
-        else:
+        try:
+            if self.checkBox_number.isChecked():
+                index = self.comboBox_xslm_choice.currentIndex()
+                selected_item = self.config.get('Alphabit Code', f'item{index}')
+                self.choice_my_organization = selected_item
+            else:
+                self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', self.selected_xlsm)[1]  # найти текст между пробелом и точкой а [1] убирает пробел
+        except:
             self.choice_my_organization = re.search(r' (?P<found_text>.*?)\.', self.selected_xlsm)[1]  # найти текст между пробелом и точкой а [1] убирает пробел
 
     def save_to_excel(self):
