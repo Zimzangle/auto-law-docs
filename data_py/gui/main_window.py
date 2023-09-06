@@ -9,6 +9,7 @@ import data_py.gui.content_gui_images.qrcode_rc
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
 
+
 from PyQt5.QtWidgets import QMessageBox, QComboBox, QAction, QTextBrowser, QWidget, QLineEdit
 from PyQt5.QtCore import QTimer, QUrl
 from PyQt5.QtGui import QDesktopServices
@@ -22,9 +23,11 @@ class AboutWindow(QtWidgets.QMainWindow, Ui_Form_about):
         self.setupUi(self)
 
 class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAction):
-    def __init__(self):
+    def __init__(self, current_directory):
         super().__init__()
         self.setupUi(self)  # Инициализируем пользовательский интерфейс
+
+        self.current_directory = current_directory
 
         # добавляем функционал кнопок
         self.pushButton_Parse.clicked.connect(self.inn_check)
@@ -136,11 +139,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         #выбор xlsm файла добавление из директории назаваний
 
     def add_files_to_combo(self):
-
-        # os.path.dirname трижды чтобы искал не в Project2\data_py\gui а в Project2\ было так current_directory = os.path.dirname(os.path.abspath(__file__))
-        current_directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-        for filename in os.listdir(current_directory):
+        # берем current_directory из main.pyw
+        for filename in os.listdir(self.current_directory):
             if filename.endswith(".xlsm"):
                 self.comboBox_xslm_choice.addItem(filename)
     def excel_start(self):
@@ -148,7 +148,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
         self.check_number()
 
-        self.wb = load_workbook(self.selected_xlsm, read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
+        self.wb = load_workbook(f'{self.current_directory}\{self.selected_xlsm}', read_only=False, keep_vba=True)  # после фн аргументы, чтобы можно было читать xlsm с макросами
         self.ws = self.wb['BD']  # имя листа
         self.last_record = (int(self.ws.max_row) + 1)  # найти номер незаполненной строки
 
