@@ -3,7 +3,6 @@ import re
 import configparser
 import os
 
-import data_py.gui.content_gui_images.qrcode_rc
 from data_py.gui.a_gui_from_ui import *
 from data_py.gui.b_gui_about import Ui_Form_about
 
@@ -12,7 +11,6 @@ from PyQt5.QtCore import QTimer, QUrl
 from PyQt5.QtGui import QDesktopServices
 from datetime import datetime
 from openpyxl import load_workbook
-
 
 class AboutWindow(QtWidgets.QMainWindow, Ui_Form_about):
     def __init__(self):
@@ -26,11 +24,10 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
         self.current_directory = current_directory
 
-        # добавляем функционал кнопок
+        # добавляем функционал кнопок и галочек
         self.pushButton_Parse.clicked.connect(self.inn_check)
         self.pushButton_Record_to_Excel.clicked.connect(self.save_to_excel)
         self.pushButton_cancel_record.clicked.connect(self.cancel_record)
-        self.pushButton_donation.clicked.connect(self.openAboutWindow)
         self.checkBox_no_parser.stateChanged.connect(self.no_parser)
         self.checkBox_number.stateChanged.connect(self.excel_start)
         self.pushButton_open_excel.clicked.connect(lambda: os.startfile(self.selected_xlsm))
@@ -39,7 +36,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.add_files_to_combo()
         self.config_settings()
         self.excel_start()
-        self.comboBox_xslm_choice.currentIndexChanged.connect(self.excel_start)
+        self.comboBox_xslm_choice.currentIndexChanged.connect(lambda: (self.pushButton_cancel_record.setEnabled(False), self.excel_start()))
 
         # menu bar
         # menu bar добавить фукнционал для  открыть excel конфиг и др вкладки
@@ -51,15 +48,16 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.action_clear_all.triggered.connect(self.clear_all)
 
 
-        self.action_readme.triggered.connect(lambda: os.startfile("data_py\help.txt"))
+        self.action_readme.triggered.connect(lambda: os.startfile("data_py\help.pdf"))
 
         self.action_info_author.triggered.connect(self.openAboutWindow)
         self.action_text_for_letter.triggered.connect(self.letter_for_contractor)
 
 
         self.actionTelegram.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://t.me/pixelpravo")))
-        self.actionInstagram.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://instagram.com/zimzangle?utm_source=qr&igshid=MzNlNGNkZWQ4Mg==")))
+        self.actionInstagram.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://instagram.com/pixelpravo?utm_source=qr&igshid=MzNlNGNkZWQ4Mg==")))
         self.actionPixelpravo_ru.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://www.pixelpravo.ru")))
+        self.actionYouTube.triggered.connect(lambda: QDesktopServices.openUrl(QUrl("https://www.youtube.com/channel/UC2uUKfBtt1LZrRWzJsqIAPA")))
 
 
     def inn_check(self):
@@ -242,7 +240,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
             # Сохраняем файл
             self.wb.save(self.selected_xlsm)
 
-            message = f'Успешно записано в excel в {self.choice_my_organization}'
+            message = f'Успешно записано в excel в {self.selected_xlsm}'
             self.message_to_user(message)
 
             # обновляем номер договора
@@ -254,6 +252,13 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         except:
             message_error = '-Закрой excel файл с реестром, который сейчас открыт\nили\n-не была нажата кнопка "Подтвердить вввод ИНН"\nили\n-не поставлена галочка на ввод без ИНН'
             self.show_error_notification(message_error)
+
+
+    def message_to_user(self, message):
+        self.textBrowser_result.setText(message)
+        self.timer = QTimer(self)
+        self.timer.start(15000)  # 15000 миллисекунд (15 секунд)
+        self.timer.timeout.connect(lambda: self.textBrowser_result.clear())
 
     def show_error_notification(self, message_error):
         error_box = QMessageBox()  # Создаем окно уведомления
@@ -307,12 +312,6 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
             del self.innOOO
 
 
-    def message_to_user(self, message):
-        self.lineEdit_result.setText(message)
-        self.timer = QTimer(self)
-        self.timer.start(15000)  # 15000 миллисекунд (15 секунд)
-        self.timer.timeout.connect(lambda: self.lineEdit_result.clear())
-
     def config_settings(self):
         # Чтение значений из конфигурационного файла
         self.config = configparser.ConfigParser()
@@ -338,7 +337,7 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
         self.wb.save(self.selected_xlsm)
         self.excel_start()
         self.pushButton_cancel_record.setEnabled(False)
-        message = f'Запись удалена из {self.choice_my_organization}'
+        message = f'Запись удалена из {self.selected_xlsm}'
         self.message_to_user(message)
 
     def openAboutWindow(self):
