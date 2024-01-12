@@ -5,6 +5,7 @@ import sys
 import os
 
 try:
+    os.system('pip install -r data_py/requirements.txt')
     def main():
         app = QApplication(sys.argv)
         window = Mywindow(current_directory)

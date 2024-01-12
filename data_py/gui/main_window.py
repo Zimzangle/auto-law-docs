@@ -179,16 +179,17 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
             if self.tabWidget.currentIndex() == 0:
                 self.ws[f'{"D"}{self.last_record}'] = self.lineEdit_NAME_organization.text()
                 self.ws[f'{"W"}{self.last_record}'] = self.textEdit_adress.toPlainText()
+                self.ws[f'{"N"}{self.last_record}'] = self.lineEdit_seo_name.text()
             else:
                 self.ws[f'{"D"}{self.last_record}'] = self.lineEdit_NAME_organization_2.text()
+                self.ws[f'{"N"}{self.last_record}'] = self.lineEdit_NAME_organization_2.text()
                 self.ws[f'{"W"}{self.last_record}'] = self.textEdit_adress_2.toPlainText()
                 self.ws[f'{"AC"}{self.last_record}'] = self.textEdit_pasport.toPlainText()
 
-
-
+            # общие ячейки
             self.ws[f'{"J"}{self.last_record}'] = self.lineEdit_form.text()
             self.ws[f'{"L"}{self.last_record}'] = self.lineEdit_seo_director_position.text()
-            self.ws[f'{"N"}{self.last_record}'] = self.lineEdit_seo_name.text()
+
             self.ws[f'{"V"}{self.last_record}'] = self.kppOOO
 
             self.ws[f'{"U"}{self.last_record}'] = self.ogrnOOO
@@ -206,6 +207,8 @@ class Mywindow(QtWidgets.QMainWindow, Ui_MainWindow, QMessageBox, QComboBox, QAc
 
 
             # ячейки неизменяемые формулы excel
+            self.ws[f'{"B"}{self.last_record}'] = '-' # запись в ячейку B чтобы не мешал текст ячейки А
+
             cell_k = '=IF(JXXX="ООО ","Общество с ограниченной ответственностью",IF(JXXX="АО ","Акционерное общество",IF(JXXX="НАО ","Непубличное кционерное общество",IF(JXXX="ПАО ","Публичное акционерное общество",IF(JXXX="ИП","Индивидуальный предприниматель",JXXX)))))'
             cell_k_change = re.sub(r'XXX', str(self.last_record), cell_k)
             self.ws[f'{"K"}{self.last_record}'] = cell_k_change
